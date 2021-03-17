@@ -25,7 +25,6 @@ dem ist die weite Welt und alles untertan.
 
   let setTexts = text => {
     document.querySelector("#text").innerText = text;
-    document.title = text;
   }
 
   let tickFunction = () => {
