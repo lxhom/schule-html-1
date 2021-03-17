@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script>
+    window.onload = () => {
+      let tick = 0;
+      let text = "Hello World!";
+
+      let setTexts = text => {
+        document.querySelector("#text").innerText = text;
+        document.title = text;
+      }
+
+      let tickFunction = () => {
+        console.log("ticking")
+        setTexts(text.substr(0, tick));
+        if (tick % 2 === 0 && tick > text.length) { document.querySelector("#text").classList.toggle("cursor") }
+        tick++;
+      }
+
+      setInterval(tickFunction, 250)
+    }
+
+    let switchTheme = () => {
+      document.documentElement.classList.toggle("dark-mode");
+    }
+  </script>
+  <style>
+      * {
+          margin: 0;
+      }
+
+      :root {
+          font-family: Courier, Monaco, monospace;
+          transition: background-color 200ms ease, color 200ms ease;
+      }
+
+      :root:not(.dark-mode) {
+          background-color: #031004;
+          color: #1d9c26;
+      }
+
+      :root.dark-mode {
+          background-color: #e2e2e2;
+          color: #024000;
+      }
+
+      body {
+          margin: 10px;
+      }
+
+      #text::before {
+          content: "> "
+      }
+      #text.cursor::after {
+          content: "_"
+      }
+
+      #theme-button {
+          position: absolute;
+          bottom: 10px;
+          right: 10px;
+          cursor: pointer;
+      }
+  </style>
+</head>
+<body>
+<div id="text" class="cursor"></div>
+<div id="theme-button" onclick="switchTheme()">Switch theme...</div>
+</body>
+</html>
