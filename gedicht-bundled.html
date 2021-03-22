@@ -30,11 +30,14 @@ dem ist die weite Welt und alles untertan.
 `;
 
       let setTexts = text => {
-        document.querySelector("#text").innerText = text;
+        document.querySelector("#text").innerHTML = text;
       }
 
       let tickFunction = () => {
-        setTexts(text.substr(0, tick));
+        let textLines = text.substr(0, tick).split("\n");
+        textLines[0] = "<b>" + textLines[0] + "</b>";
+        if (textLines[20]) textLines[20] = "<code>" + textLines[20] + "</code>";
+        setTexts(textLines.join("<br>"));
         tick++;
       }
 
@@ -43,6 +46,7 @@ dem ist die weite Welt und alles untertan.
 
     let switchTheme = () => {
       document.documentElement.classList.toggle("dark-mode");
+      document.querySelector("#theme-button").classList.toggle("dark-mode");
     }
 
   </script>
@@ -57,12 +61,12 @@ dem ist die weite Welt und alles untertan.
           transition: background-color 200ms ease, color 200ms ease;
       }
 
-      :root:not(.dark-mode) {
+      :root:not(.dark-mode), #theme-button.dark-mode{
           background-color: #1a1a1d;
           color: #f4f4f4;
       }
 
-      :root.dark-mode {
+      :root.dark-mode, #theme-button:not(.dark-mode) {
           background-color: #f4f4f4;
           color: #1a1a1d;
       }
@@ -77,6 +81,13 @@ dem ist die weite Welt und alles untertan.
           bottom: 10px;
           right: 10px;
           cursor: pointer;
+          user-select: none;
+          padding: 5px;
+          border-radius: 5px;
+      }
+
+      #theme-button:hover {
+          text-decoration: underline;
       }
 
   </style>
