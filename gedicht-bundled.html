@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <title>Hallo Corona</title>
   <script>
+    let interval;
     window.onload = () => {
       let tick = 0;
-      let text = `An sich
+      let text = `[An sich]
 
 Sei dennoch unverzagt! Gib dennoch unverloren!
 Weich keinem Glücke nicht, steh höher als der Neid,
@@ -26,27 +27,48 @@ und eh du fürder gehst, so geh in dich zurücke.
 Wer sein selbst Meister ist und sich beherrschen kann,
 dem ist die weite Welt und alles untertan.
 
-- Paul Fleming
+{- Paul Fleming}
 `;
 
       let setTexts = text => {
-        document.querySelector("#text").innerHTML = text;
+        document.querySelector("#text").innerHTML += text;
       }
 
       let tickFunction = () => {
-        let textLines = text.substr(0, tick).split("\n");
-        textLines[0] = "<b>" + textLines[0] + "</b>";
-        if (textLines[20]) textLines[20] = "<code>" + textLines[20] + "</code>";
-        setTexts(textLines.join("<br>"));
+        if (tick > text.length) clearInterval(interval);
+        let char = text.substr(tick, 1)
+        switch (char) {
+          case "[":
+            setTexts("<b>")
+          break;
+          case "]":
+            setTexts("</b>")
+          break;
+          case "{":
+            setTexts("<code>")
+          break;
+          case "}":
+            setTexts("</code>")
+          break;
+          case "\n":
+            setTexts("<br>")
+          default:
+            setTexts(`<span class="color-${tick%3}">${char}</span>`)
+        }
         tick++;
       }
 
-      setInterval(tickFunction, 50)
+      interval = setInterval(tickFunction, 50)
     }
 
     let switchTheme = () => {
       document.documentElement.classList.toggle("dark-mode");
       document.querySelector("#theme-button").classList.toggle("dark-mode");
+    }
+
+    let switchRgb = () => {
+      document.querySelector("#text").classList.toggle("rgb")
+      document.querySelector("#buttons").classList.toggle("rgb")
     }
 
   </script>
@@ -76,24 +98,45 @@ dem ist die weite Welt und alles untertan.
       }
 
 
-      #theme-button {
+      #buttons {
           position: absolute;
           bottom: 10px;
           right: 10px;
+      }
+      .button {
           cursor: pointer;
           user-select: none;
           padding: 5px;
           border-radius: 5px;
       }
 
-      #theme-button:hover {
+      .button:hover {
           text-decoration: underline;
+      }
+
+      #buttons:not(.rgb) > #rgb-button {
+          color: #fff;
+          background-color: #fff0;
+          background-image: linear-gradient(to right, #800, #080, #008);
+      }
+
+      #text.rgb > .color-0, #buttons:not(.rgb) > span > .color-0 {
+          color: #f00;
+      }
+      #text.rgb > .color-1, #buttons:not(.rgb) > span > .color-1 {
+          color: #0f0;
+      }
+      #text.rgb > .color-2, #buttons:not(.rgb) > span > .color-2 {
+          color: #00f;
       }
 
   </style>
 </head>
 <body>
 <div id="text"></div>
-<div id="theme-button" onclick="switchTheme()">Theme wechseln...</div>
+<div id="buttons">
+  <span id="theme-button" class="button" onclick="switchTheme()">Theme wechseln...</span>
+  <span id="rgb-button" class="button" onclick="switchRgb()"><span class="color-0">R</span><span class="color-1">G</span><span class="color-2">B</span> umschalten...</span>
+</div>
 </body>
 </html>
